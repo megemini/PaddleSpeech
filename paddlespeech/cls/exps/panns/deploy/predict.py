@@ -56,7 +56,7 @@ def extract_features(files: str, **kwargs):
 
         feature_extractor = LogMelSpectrogram(sr, **kwargs)
         feat = feature_extractor(paddle.to_tensor(waveforms[i]))
-        feat = paddle.transpose(feat, perm=[1, 0]).unsqueeze(0)
+        feat = paddle.transpose(feat, perm=[1, 0])
 
         feats.append(feat)
 
@@ -86,6 +86,7 @@ class Predictor(object):
             params_file), 'Please check model and parameter files.'
 
         config = inference.Config(model_file, params_file)
+        config.disable_mkldnn()
         if device == "gpu":
             # set GPU configs accordingly
             # such as intialize the gpu memory, enable tensorrt
