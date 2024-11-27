@@ -77,8 +77,8 @@ class Predictor(object):
         model_file = os.path.join(model_dir, "inference.pdmodel")
         if not os.path.exists(model_file):
             model_file = os.path.join(model_dir, "inference.json")
-        if not os.path.exists(model_file):
-            raise ValueError("Inference model file not exists!")
+            if not os.path.exists(model_file):
+                raise ValueError("Inference model file not exists!")
 
         params_file = os.path.join(model_dir, "inference.pdiparams")
 
