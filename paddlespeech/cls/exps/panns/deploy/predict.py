@@ -22,6 +22,8 @@ from paddle.audio.features import LogMelSpectrogram
 from paddleaudio.backends import soundfile_load as load_audio
 from scipy.special import softmax
 
+import paddlespeech.utils
+
 # yapf: disable
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_dir", type=str, required=True, default="./export", help="The directory to static model.")
@@ -74,17 +76,17 @@ class Predictor(object):
                  enable_mkldnn=False):
         self.batch_size = batch_size
 
-        if os.path.exists(os.path.join(model_dir, "inference.json")):
-            model_file = os.path.join(model_dir, "inference.json")
+        if paddlespeech.utils.satisfy_paddle_version('2.6.0'):
+            config = inference.Config(model_dir, 'inference')
         else:
-            model_file = os.path.join(model_dir, "inference.pdmodel")
+            model_file = os.path.join(model_dir, 'inference.pdmodel')
+            params_file = os.path.join(model_dir, "inference.pdiparams")
 
-        params_file = os.path.join(model_dir, "inference.pdiparams")
+            assert os.path.isfile(model_file) and os.path.isfile(
+                params_file), 'Please check model and parameter files.'
 
-        assert os.path.isfile(model_file) and os.path.isfile(
-            params_file), 'Please check model and parameter files.'
+            config = inference.Config(model_file, params_file)
 
-        config = inference.Config(model_file, params_file)
         config.disable_mkldnn()
         if device == "gpu":
             # set GPU configs accordingly
