@@ -59,7 +59,6 @@ def extract_features(files: str, **kwargs):
         feature_extractor = LogMelSpectrogram(sr, **kwargs)
         feat = feature_extractor(paddle.to_tensor(waveforms[i]))
         feat = paddle.transpose(feat, perm=[1, 0])
-
         feats.append(feat)
 
     return np.stack(feats, axis=0)
@@ -78,6 +77,7 @@ class Predictor(object):
 
         if paddlespeech.utils.satisfy_paddle_version('3.0.0-beta'):
             config = inference.Config(model_dir, 'inference')
+            config.disable_mkldnn()
         else:
             model_file = os.path.join(model_dir, 'inference.pdmodel')
             params_file = os.path.join(model_dir, "inference.pdiparams")
@@ -87,7 +87,6 @@ class Predictor(object):
 
             config = inference.Config(model_file, params_file)
 
-        config.disable_mkldnn()
         if device == "gpu":
             # set GPU configs accordingly
             # such as intialize the gpu memory, enable tensorrt
