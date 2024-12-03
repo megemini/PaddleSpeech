@@ -76,7 +76,7 @@ class Predictor(object):
                  enable_mkldnn=False):
         self.batch_size = batch_size
 
-        if paddlespeech.utils.satisfy_paddle_version('3.0.0b'):
+        if paddlespeech.utils.satisfy_paddle_version('3.0.0-beta'):
             config = inference.Config(model_dir, 'inference')
         else:
             model_file = os.path.join(model_dir, 'inference.pdmodel')
