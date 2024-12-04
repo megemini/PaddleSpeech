@@ -62,6 +62,9 @@ if __name__ == '__main__':
     model.eval()
 
     feat = extract_features(predicting_conf['audio_file'], **feat_conf)
+    if feat.dim() == 3:
+        feat = feat.unsqueeze(1)
+
     logits = model(feat)
     probs = F.softmax(logits, axis=1).numpy()
 

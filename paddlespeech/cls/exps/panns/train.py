@@ -89,6 +89,8 @@ if __name__ == "__main__":
                 waveforms
             )  # Need a padding when lengths of waveforms differ in a batch.
             feats = paddle.transpose(feats, [0, 2, 1])  # To [N, length, n_mels]
+            if feats.dim() == 3:
+                feats = feats.unsqueeze(1)
 
             logits = model(feats)
 
@@ -150,6 +152,8 @@ if __name__ == "__main__":
                     waveforms, labels = batch
                     feats = feature_extractor(waveforms)
                     feats = paddle.transpose(feats, [0, 2, 1])
+                    if feats.dim() == 3:
+                        feats = feats.unsqueeze(1)
 
                     logits = model(feats)
 

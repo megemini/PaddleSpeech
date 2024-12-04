@@ -109,6 +109,8 @@ if __name__ == "__main__":
         num_samples = 0
         for batch_idx, batch in enumerate(train_loader):
             feats, labels, length = batch  # feats-->(N, length, n_mels)
+            if feats.dim() == 3:
+                feats = feats.unsqueeze(1)
 
             logits = model(feats)
 
@@ -170,6 +172,9 @@ if __name__ == "__main__":
             with logger.processing('Evaluation on validation dataset'):
                 for batch_idx, batch in enumerate(dev_loader):
                     feats, labels, length = batch
+                    if feats.dim() == 3:
+                        feats = feats.unsqueeze(1)
+
                     logits = model(feats)
 
                     preds = paddle.argmax(logits, axis=1)

@@ -98,6 +98,8 @@ for epoch in range(1, epochs + 1):
         # Need a padding when lengths of waveforms differ in a batch.
         feats = feature_extractor(waveforms)        
         feats = paddle.transpose(feats, [0, 2, 1])
+        if feats.dim() == 3:
+            feats = feats.unsqueeze(1)
         logits = model(feats)
         loss = criterion(logits, labels)
         loss.backward()

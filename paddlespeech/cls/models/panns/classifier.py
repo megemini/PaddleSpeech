@@ -28,7 +28,9 @@ class SoundClassifier(nn.Layer):
 
     def forward(self, x):
         # x: (batch_size, num_frames, num_melbins) -> (batch_size, 1, num_frames, num_melbins)
-        x = x.unsqueeze(1)
+        if x.dim() == 3:
+            x = x.unsqueeze(1)
+
         x = self.backbone(x)
         x = self.dropout(x)
         logits = self.fc(x)
