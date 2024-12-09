@@ -97,7 +97,6 @@ def main(config, args):
 
 if __name__ == "__main__":
     parser = default_argument_parser()
-    # save asr result to
     args = parser.parse_args()
 
     config = CfgNode(new_allowed=True)
