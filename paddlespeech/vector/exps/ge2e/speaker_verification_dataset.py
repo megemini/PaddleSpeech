@@ -39,7 +39,10 @@ class MultiSpeakerMelDataset(Dataset):
 
     def __init__(self, dataset_root: Path):
         self.root = Path(dataset_root).expanduser()
-        speaker_dirs = [f for f in self.root.glob("*") if f.is_dir()]
+        speaker_dirs = [
+            f for f in self.root.glob("*")
+            if f.is_dir() and list(f.glob("*.npy"))
+        ]
 
         speaker_utterances = {
             speaker_dir: list(speaker_dir.glob("*.npy"))
