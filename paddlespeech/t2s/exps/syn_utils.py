@@ -592,7 +592,7 @@ def get_predictor(
 
     # after paddle 3.0, support new inference interface
     if paddlespeech.utils.satisfy_paddle_version('3.0.0-beta'):
-        model_name = ''.join(str(model_file).rsplit('.', 1)[:-1])
+        model_name = str(model_file).rsplit('.', 1)[0]
         assert model_name == str(params_file).rstrip(
             '.pdiparams'
         ), "The prefix of model_file and params_file should be same."
